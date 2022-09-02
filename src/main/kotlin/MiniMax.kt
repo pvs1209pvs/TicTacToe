@@ -1,12 +1,14 @@
 object MiniMax {
 
     var globalBest = Board()
+
+    // if (level % 2 == 0) 'o' else 'x'
     // human max x
     // computer min o
     fun miniMax(board: Board, token: Char, level: Int) { // x
 
         if (level == difficulty) {
-            board.score = heuristic(board, if (level % 2 == 0) 'o' else 'x')
+            board.score = heuristic(board)
             return
         }
 
@@ -22,11 +24,11 @@ object MiniMax {
             }
 
             board.score = nextMoves.minBy { it.score }.score
-            if(level != 1)
-            globalBest = board
+            if (level != 1)
+                globalBest = board
 
 
-        } else{ // token = o
+        } else { // token = o
 
             val nextMoves = nextMoves(board, 'x')
 
@@ -39,7 +41,7 @@ object MiniMax {
 
             board.score = nextMoves.maxBy { it.score }.score
             if (level != 1)
-            globalBest = board
+                globalBest = board
 
         }
 
@@ -67,7 +69,8 @@ object MiniMax {
 
     }
 
-    fun heuristic(board: Board, token: Char): Int {
+
+    fun hRow(board: Board, token: Char): Int {
 
         var score = 0
 
@@ -79,6 +82,13 @@ object MiniMax {
                 else -> 0
             }
         }
+
+        return score
+    }
+
+    fun hCol(board: Board, token: Char): Int {
+
+        var score = 0
 
         for (row in 0 until 3) {
 
@@ -98,6 +108,14 @@ object MiniMax {
             }
 
         }
+
+        return score
+
+    }
+
+    fun hDiag(board: Board, token: Char): Int {
+
+        var score = 0
 
         var diagCount = 0
         var antiDiagCount = 0
@@ -125,7 +143,14 @@ object MiniMax {
             else -> 0
         }
 
-        return if (token == 'x') score else -1 * score
+        return score
+    }
+
+    fun heuristic(board: Board): Int {
+
+        val xScore = hRow(board, 'x') + hCol(board, 'x') + hDiag(board, 'x')
+        val oScore = hRow(board, 'o') + hCol(board, 'o') + hDiag(board, 'o')
+        return xScore-oScore
 
     }
 
