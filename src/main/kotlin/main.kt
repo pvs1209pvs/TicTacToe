@@ -1,13 +1,19 @@
 import java.util.*
 
-const val difficulty = 8
+const val difficulty = 3
 
 fun main() {
+
+
+
+//    testRun()
+//    return
 
     val board = Board()
 
     println("Choose your token: X or O")
     val humanToken = readln()[0]
+
 
     while (true) {
 
@@ -17,15 +23,17 @@ fun main() {
 
         println(board)
 
-        MiniMax.miniMax(board, humanToken, 1)
+        val result = MiniMax.miniMax(board, humanToken, 1)
 
-        for (i in 0 until 3) {
-            board.board[i] = Arrays.copyOf(MiniMax.globalBest.board[i], 3)
-        }
+//        for (i in 0 until 3) {
+//            board.board[i] = Arrays.copyOf(MiniMax.globalBest.board[i], 3)
+//        }
 
-        board.score = MiniMax.globalBest.score
+//        board.score = MiniMax.globalBest.score
 
-        println(board)
+        println("Result")
+        println(MiniMax.globalBest)
+        board.deepCopy(MiniMax.globalBest)
     }
 //    testRun()
 
@@ -33,19 +41,28 @@ fun main() {
 }
 
 fun testRun() {
-    var board = Board()
-    val humanToken = 'x'
 
-    board.mark(humanToken, Pair(0, 0))
+    val board = Board()
 
-    println("start $board")
+    board.mark('x', Pair(0, 0))
+    board.mark('x', Pair(1, 0))
 
-    while (true) {
-        MiniMax.miniMax(board, 'x', 1) // comp
-        board = MiniMax.globalBest
-//        println("global ${MiniMax.globalBest}")
-//        println("end $board")
-    }
+    board.mark('o', Pair(2, 1))
+    board.mark('o', Pair(2, 2))
+//    println(board)
+
+    println("s ${MiniMax.heuristic(board,'o')}")
+
+    val board2 = Board()
+
+    board2.mark('x', Pair(0, 0))
+    board2.mark('x', Pair(1, 0))
+
+    board2.mark('o', Pair(2, 0))
+    board2.mark('o', Pair(2, 2))
+//    println(board2)
+
+    println("s ${MiniMax.heuristic(board2,'o')}")
 
 
 }

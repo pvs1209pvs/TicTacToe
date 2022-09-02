@@ -8,7 +8,7 @@ object MiniMax {
     fun miniMax(board: Board, token: Char, level: Int) { // x
 
         if (level == difficulty) {
-            board.score = heuristic(board)
+            board.score = heuristic(board, 'x')
             return
         }
 
@@ -16,32 +16,37 @@ object MiniMax {
 
             val nextMoves = nextMoves(board, 'o')
 
-            if (nextMoves.isEmpty()) return
 
-            // B C
             nextMoves.forEach {
                 miniMax(it, 'o', level + 1)
+                if (it.score > board.score) {
+                    board.score = it.score
+
+                }
             }
 
-            board.score = nextMoves.minBy { it.score }.score
-            if (level != 1)
-                globalBest = board
+            if (level == 1) {
+                globalBest.deepCopy(nextMoves.maxBy { it.score })
+            }
+
+//            return board
 
 
         } else { // token = o
 
             val nextMoves = nextMoves(board, 'x')
 
-            if (nextMoves.isEmpty()) return
-
-            // D E F G
             nextMoves.forEach {
                 miniMax(it, 'x', level + 1)
+                if (it.score < board.score) {
+                    board.score = it.score
+                }
             }
 
-            board.score = nextMoves.maxBy { it.score }.score
-            if (level != 1)
-                globalBest = board
+            if (level == 1) {
+                globalBest.deepCopy(nextMoves.minBy { it.score })
+
+            }
 
         }
 
@@ -63,9 +68,7 @@ object MiniMax {
             }
         }
 
-
-
-        return moves
+        return moves.distinct()
 
     }
 
@@ -90,17 +93,40 @@ object MiniMax {
 
         var score = 0
 
+        // xxo
+//        if(board.board[0][0] =='x' && board.board[1][0] == 'x' && board.board[2][0]=='o'){
+//            score += 1
+//        }
+//        if(board.board[0][1] =='x' && board.board[1][1] == 'x' && board.board[2][1]=='o'){
+//            score += 1
+//        }
+//        if(board.board[0][2] =='x' && board.board[1][2] == 'x' && board.board[2][2]=='o'){
+//            score += 1
+//        }
+//
+//        if(board.board[0][0] =='o' && board.board[1][0] == 'x' && board.board[2][0]=='o'){
+//            score += 1
+//        }
+//        if(board.board[0][1] =='x' && board.board[1][1] == 'x' && board.board[2][1]=='o'){
+//            score += 1
+//        }
+//        if(board.board[0][2] =='x' && board.board[1][2] == 'x' && board.board[2][2]=='o'){
+//            score += 1
+//        }
+//
+
         for (row in 0 until 3) {
 
-            var colCount = 0
+            var xCount = 0
+            var oCount = 0
 
             for (col in 0 until 3) {
                 if (board.board[col][row] == token) {
-                    colCount += 1
+                    xCount += 1
                 }
             }
 
-            score += when (colCount) {
+            score += when (xCount) {
                 3 -> 100
                 2 -> 10
                 1 -> 1
@@ -146,11 +172,16 @@ object MiniMax {
         return score
     }
 
-    fun heuristic(board: Board): Int {
+    fun heuristic(board: Board, turn: Char): Int {
 
-        val xScore = hRow(board, 'x') + hCol(board, 'x') + hDiag(board, 'x')
-        val oScore = hRow(board, 'o') + hCol(board, 'o') + hDiag(board, 'o')
-        return xScore-oScore
+        var xScore = hRow(board, 'x') + hCol(board, 'x') + hDiag(board, 'x')
+        var oScore = hRow(board, 'o') + hCol(board, 'o') + hDiag(board, 'o')
+
+        return oScore - xScore
+
+    }
+
+    fun h(board: Board) {
 
     }
 

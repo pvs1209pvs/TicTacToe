@@ -1,10 +1,14 @@
 import java.lang.StringBuilder
 import java.util.*
 
-class Board {
+class Board() {
 
     val board = Array(3) { Array(3) { ' ' } }
     var score = 0
+
+    init {
+//        b = Board()
+    }
 
     fun make(): Board {
         val newBoard = Board()
@@ -17,6 +21,18 @@ class Board {
 
         return newBoard
 
+
+    }
+
+    fun deepCopy(other:Board){
+
+        for (i in 0 until 3){
+            for (j in 0 until  3){
+                board[i][j] = other.board[i][j]
+            }
+        }
+
+        score = other.score
 
     }
 
@@ -36,7 +52,13 @@ class Board {
 
         other as Board
 
-        if (!board.contentDeepEquals(other.board)) return false
+        if(other.score != score) return false
+
+        for (i in 0 until 3){
+            for (j in 0 until 3){
+                if(other.board[i][j] != board[i][j]) return false
+            }
+        }
 
         return true
     }
