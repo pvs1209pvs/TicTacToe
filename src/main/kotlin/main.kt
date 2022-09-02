@@ -1,6 +1,6 @@
 import java.util.*
 
-const val difficulty = 3
+const val difficulty = 8
 
 fun main() {
 

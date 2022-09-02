@@ -14,6 +14,8 @@ object MiniMax {
 
             val nextMoves = nextMoves(board, 'o')
 
+            if (nextMoves.isEmpty()) return
+
             // B C
             nextMoves.forEach {
                 miniMax(it, 'o', level + 1)
@@ -28,7 +30,9 @@ object MiniMax {
 
             val nextMoves = nextMoves(board, 'x')
 
-             // D E F G
+            if (nextMoves.isEmpty()) return
+
+            // D E F G
             nextMoves.forEach {
                 miniMax(it, 'x', level + 1)
             }
@@ -56,6 +60,8 @@ object MiniMax {
                 }
             }
         }
+
+
 
         return moves
 
