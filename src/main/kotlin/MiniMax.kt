@@ -2,20 +2,18 @@ object MiniMax {
 
     var globalBest = Board()
 
-    // if (level % 2 == 0) 'o' else 'x'
     // human max x
     // computer min o
     fun miniMax(board: Board, token: Char, level: Int) { // x
 
         if (level == difficulty) {
-            board.score = heuristic(board, 'x')
+            board.score = heuristic(board)
             return
         }
 
         if (token == 'x') {
 
             val nextMoves = nextMoves(board, 'o')
-
 
             nextMoves.forEach {
                 miniMax(it, 'o', level + 1)
@@ -29,10 +27,7 @@ object MiniMax {
                 globalBest.deepCopy(nextMoves.maxBy { it.score })
             }
 
-//            return board
-
-
-        } else { // token = o
+        } else {
 
             val nextMoves = nextMoves(board, 'x')
 
@@ -172,16 +167,12 @@ object MiniMax {
         return score
     }
 
-    fun heuristic(board: Board, turn: Char): Int {
+    fun heuristic(board: Board): Int {
 
         var xScore = hRow(board, 'x') + hCol(board, 'x') + hDiag(board, 'x')
         var oScore = hRow(board, 'o') + hCol(board, 'o') + hDiag(board, 'o')
 
         return oScore - xScore
-
-    }
-
-    fun h(board: Board) {
 
     }
 

@@ -6,9 +6,6 @@ fun main() {
 
 
 
-//    testRun()
-//    return
-
     val board = Board()
 
     println("Choose your token: X or O")
@@ -23,13 +20,7 @@ fun main() {
 
         println(board)
 
-        val result = MiniMax.miniMax(board, humanToken, 1)
-
-//        for (i in 0 until 3) {
-//            board.board[i] = Arrays.copyOf(MiniMax.globalBest.board[i], 3)
-//        }
-
-//        board.score = MiniMax.globalBest.score
+        MiniMax.miniMax(board, humanToken, 1)
 
         println("Result")
         println(MiniMax.globalBest)
@@ -41,28 +32,6 @@ fun main() {
 }
 
 fun testRun() {
-
-    val board = Board()
-
-    board.mark('x', Pair(0, 0))
-    board.mark('x', Pair(1, 0))
-
-    board.mark('o', Pair(2, 1))
-    board.mark('o', Pair(2, 2))
-//    println(board)
-
-    println("s ${MiniMax.heuristic(board,'o')}")
-
-    val board2 = Board()
-
-    board2.mark('x', Pair(0, 0))
-    board2.mark('x', Pair(1, 0))
-
-    board2.mark('o', Pair(2, 0))
-    board2.mark('o', Pair(2, 2))
-//    println(board2)
-
-    println("s ${MiniMax.heuristic(board2,'o')}")
 
 
 }
