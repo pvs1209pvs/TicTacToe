@@ -4,19 +4,19 @@ object MiniMax {
 
     // human max x
     // computer min o
-    fun miniMax(board: Board, token: Char, level: Int) { // x
+    fun miniMax(board: Board, isMaxi: Boolean, level: Int, p0: Player, p1: Player) { // x
 
         if (level == difficulty) {
-            board.score = heuristic(board)
+            board.score = heuristic(board, p0, p1)
             return
         }
 
-        if (token == 'x') {
+        if (isMaxi) {
 
-            val nextMoves = nextMoves(board, 'o')
+            val nextMoves = nextMoves(board, p1.token)
 
             nextMoves.forEach {
-                miniMax(it, 'o', level + 1)
+                miniMax(it, false, level + 1, p0, p1)
                 if (it.score > board.score) {
                     board.score = it.score
 
@@ -29,10 +29,10 @@ object MiniMax {
 
         } else {
 
-            val nextMoves = nextMoves(board, 'x')
+            val nextMoves = nextMoves(board, p0.token)
 
             nextMoves.forEach {
-                miniMax(it, 'x', level + 1)
+                miniMax(it, false, level + 1, p0, p1)
                 if (it.score < board.score) {
                     board.score = it.score
                 }
@@ -50,7 +50,7 @@ object MiniMax {
     /**
      * @param token Char to mark.
      */
-    fun nextMoves(board: Board, token: Char): List<Board> {
+    private fun nextMoves(board: Board, token: Char): List<Board> {
 
         val moves = mutableListOf<Board>()
 
@@ -67,8 +67,7 @@ object MiniMax {
 
     }
 
-
-    fun hRow(board: Board, token: Char): Int {
+    private fun hRow(board: Board, token: Char): Int {
 
         var score = 0
 
@@ -84,7 +83,7 @@ object MiniMax {
         return score
     }
 
-    fun hCol(board: Board, token: Char): Int {
+    private fun hCol(board: Board, token: Char): Int {
 
         var score = 0
 
@@ -134,7 +133,7 @@ object MiniMax {
 
     }
 
-    fun hDiag(board: Board, token: Char): Int {
+    private fun hDiag(board: Board, token: Char): Int {
 
         var score = 0
 
@@ -167,13 +166,10 @@ object MiniMax {
         return score
     }
 
-    fun heuristic(board: Board): Int {
-
-        var xScore = hRow(board, 'x') + hCol(board, 'x') + hDiag(board, 'x')
-        var oScore = hRow(board, 'o') + hCol(board, 'o') + hDiag(board, 'o')
-
-        return oScore - xScore
-
+    private fun heuristic(board: Board, p0: Player, p1: Player): Int {
+        val p0Score = hRow(board, p0.token) + hCol(board, p0.token) + hDiag(board, p0.token)
+        val p1Score = hRow(board, p1.token) + hCol(board, p1.token) + hDiag(board, p1.token)
+        return p1Score - p0Score
     }
 
 }
