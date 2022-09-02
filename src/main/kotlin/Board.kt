@@ -1,20 +1,17 @@
 import java.lang.StringBuilder
 import java.util.*
 
-class Board() {
+class Board {
 
-    val board = Array(3) { Array(3) { ' ' } }
+    val board = Array(3) { Array(3) { Token.BLANK } }
     var score = 0
 
-    init {
-//        b = Board()
-    }
 
     fun make(): Board {
         val newBoard = Board()
 
-        for (i in 0 until 3){
-            newBoard.board[i] = Arrays.copyOf(board[i],3)
+        for (i in 0 until 3) {
+            newBoard.board[i] = Arrays.copyOf(board[i], 3)
         }
 
         newBoard.score = score
@@ -24,10 +21,10 @@ class Board() {
 
     }
 
-    fun deepCopy(other:Board){
+    fun deepCopy(other: Board) {
 
-        for (i in 0 until 3){
-            for (j in 0 until  3){
+        for (i in 0 until 3) {
+            for (j in 0 until 3) {
                 board[i][j] = other.board[i][j]
             }
         }
@@ -36,13 +33,13 @@ class Board() {
 
     }
 
-    fun mark(token: Char, loc: Pair<Int, Int>) {
+    fun mark(token: Token, loc: Pair<Int, Int>) {
         if (withinBound(loc) && isBlank(loc)) {
             board[loc.first][loc.second] = token
         }
     }
 
-    fun isBlank(loc: Pair<Int, Int>) = board[loc.first][loc.second] == ' '
+    fun isBlank(loc: Pair<Int, Int>) = board[loc.first][loc.second] == Token.BLANK
 
     private fun withinBound(loc: Pair<Int, Int>) = loc.first in 0..2 && loc.second in 0..2
 
@@ -52,11 +49,11 @@ class Board() {
 
         other as Board
 
-        if(other.score != score) return false
+        if (other.score != score) return false
 
-        for (i in 0 until 3){
-            for (j in 0 until 3){
-                if(other.board[i][j] != board[i][j]) return false
+        for (i in 0 until 3) {
+            for (j in 0 until 3) {
+                if (other.board[i][j] != board[i][j]) return false
             }
         }
 
@@ -73,8 +70,8 @@ class Board() {
 
         result.append(score).append("\n")
 
-        for (i in 0 until  3){
-            result.append(board[i].contentToString()).append("\n")
+        for (i in 0 until 3) {
+            result.append(board[i].contentToString().replace(Token.BLANK.name, " ", true)).append("\n")
         }
 
         return result.toString()

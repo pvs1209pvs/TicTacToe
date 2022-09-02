@@ -4,7 +4,7 @@ object MiniMax {
 
     // human max x
     // computer min o
-    fun miniMax(board: Board, isMaxi: Boolean, level: Int, p0: Player, p1: Player) { // x
+    fun miniMax(board: Board, isMaxi: Boolean, level: Int, p0: Player, p1: Player) {
 
         if (level == difficulty) {
             board.score = heuristic(board, p0, p1)
@@ -50,7 +50,7 @@ object MiniMax {
     /**
      * @param token Char to mark.
      */
-    private fun nextMoves(board: Board, token: Char): List<Board> {
+    private fun nextMoves(board: Board, token: Token): List<Board> {
 
         val moves = mutableListOf<Board>()
 
@@ -67,7 +67,7 @@ object MiniMax {
 
     }
 
-    private fun hRow(board: Board, token: Char): Int {
+    private fun hRow(board: Board, token: Token): Int {
 
         var score = 0
 
@@ -83,31 +83,10 @@ object MiniMax {
         return score
     }
 
-    private fun hCol(board: Board, token: Char): Int {
+    private fun hCol(board: Board, token: Token): Int {
 
         var score = 0
 
-        // xxo
-//        if(board.board[0][0] =='x' && board.board[1][0] == 'x' && board.board[2][0]=='o'){
-//            score += 1
-//        }
-//        if(board.board[0][1] =='x' && board.board[1][1] == 'x' && board.board[2][1]=='o'){
-//            score += 1
-//        }
-//        if(board.board[0][2] =='x' && board.board[1][2] == 'x' && board.board[2][2]=='o'){
-//            score += 1
-//        }
-//
-//        if(board.board[0][0] =='o' && board.board[1][0] == 'x' && board.board[2][0]=='o'){
-//            score += 1
-//        }
-//        if(board.board[0][1] =='x' && board.board[1][1] == 'x' && board.board[2][1]=='o'){
-//            score += 1
-//        }
-//        if(board.board[0][2] =='x' && board.board[1][2] == 'x' && board.board[2][2]=='o'){
-//            score += 1
-//        }
-//
 
         for (row in 0 until 3) {
 
@@ -133,7 +112,7 @@ object MiniMax {
 
     }
 
-    private fun hDiag(board: Board, token: Char): Int {
+    private fun hDiag(board: Board, token: Token): Int {
 
         var score = 0
 

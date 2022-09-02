@@ -1,2 +1,1 @@
-data class Player(val token:Char) {
-}
+data class Player(val token:Token)

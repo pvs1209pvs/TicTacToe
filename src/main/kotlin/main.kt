@@ -2,13 +2,13 @@ const val difficulty = 3
 
 fun main() {
 
-
     val board = Board()
 
-    println("Choose your token: X or O")
+    println("Choose your token:\n1. X\n2. O")
+    val userInput = readLine()!!.toInt()
 
-    val p0 = Player(readln()[0])
-    val p1 = Player(if (p0.token == 'x') 'o' else 'x')
+    val p0 = Player(if (userInput == 1) Token.X else Token.O)
+    val p1 = Player(if (p0.token == Token.X) Token.O else Token.X)
 
     while (true) {
 
@@ -18,7 +18,7 @@ fun main() {
 
         println(board)
 
-        MiniMax.miniMax(board, true, 1, p0,p1)
+        MiniMax.miniMax(board, true, 1, p0, p1)
 
         println("Result")
         println(MiniMax.globalBest)
