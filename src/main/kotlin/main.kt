@@ -13,7 +13,7 @@ fun main() {
 
     while (true) {
 
-        println("Take your turn")
+        println("Take your turn (2 digit number)")
         var humanLocInput = readln().map { it.digitToInt() }
 
         while (board.mark(p0.token, Pair(humanLocInput[0], humanLocInput[1])) == -1) {
