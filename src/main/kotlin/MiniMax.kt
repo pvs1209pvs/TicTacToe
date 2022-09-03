@@ -1,17 +1,19 @@
 object MiniMax {
 
+    private const val difficulty = 3
+
     var globalBest = Board()
 
     // human max x
     // computer min o
-    fun miniMax(board: Board, isMaxi: Boolean, level: Int, p0: Player, p1: Player) {
+    fun miniMax(board: Board, isMaximizer: Boolean, level: Int, p0: Player, p1: Player) {
 
         if (level == difficulty) {
             board.score = heuristic(board, p0, p1)
             return
         }
 
-        if (isMaxi) {
+        if (isMaximizer) {
 
             val nextMoves = nextMoves(board, p1.token)
 
@@ -40,7 +42,6 @@ object MiniMax {
 
             if (level == 1) {
                 globalBest.deepCopy(nextMoves.minBy { it.score })
-
             }
 
         }

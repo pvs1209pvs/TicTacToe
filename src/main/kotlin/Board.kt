@@ -39,6 +39,13 @@ class Board {
         }
     }
 
+    fun isWin(token: Token): Boolean {
+        for (b in board){
+           if(b.count { it == token }==3) return true
+        }
+        return false
+    }
+
     fun isBlank(loc: Pair<Int, Int>) = board[loc.first][loc.second] == Token.BLANK
 
     private fun withinBound(loc: Pair<Int, Int>) = loc.first in 0..2 && loc.second in 0..2
