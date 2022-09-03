@@ -39,10 +39,55 @@ class Board {
         }
     }
 
-    fun isWin(token: Token): Boolean {
+    fun isWin(token: Token) = isWinRowCheck(token) || isWinColCheck(token) || isWinDiagCheck(token)
+
+    fun isWinRowCheck(token: Token): Boolean {
         for (b in board){
            if(b.count { it == token }==3) return true
         }
+        return false
+    }
+
+    fun isWinColCheck(token:Token): Boolean {
+
+        for (row in 0 until 3) {
+
+            var tokenCount = 0
+
+            for (col in 0 until 3) {
+                if (board[col][row] == token) {
+                    tokenCount += 1
+                }
+            }
+
+            if(tokenCount==3) return true
+
+        }
+
+        return false
+
+    }
+
+    private fun isWinDiagCheck(token: Token): Boolean {
+
+        var score = 0
+
+        var diagCount = 0
+        var antiDiagCount = 0
+
+        for (i in 0 until 3) {
+            if (board[i][i] == token) {
+                diagCount += 1
+            }
+            if (board[i][2 - i] == token) {
+                antiDiagCount += 1
+            }
+        }
+
+        if(diagCount == 3 || antiDiagCount==3){
+            return true
+        }
+
         return false
     }
 

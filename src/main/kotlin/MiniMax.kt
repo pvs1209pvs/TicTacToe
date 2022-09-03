@@ -92,7 +92,6 @@ object MiniMax {
         for (row in 0 until 3) {
 
             var xCount = 0
-            var oCount = 0
 
             for (col in 0 until 3) {
                 if (board.board[col][row] == token) {

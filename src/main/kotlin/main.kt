@@ -15,8 +15,8 @@ fun main() {
         println("Take your turn")
         val humanLocInput = readln().map { it.digitToInt() }
         board.mark(p0.token, Pair(humanLocInput[0], humanLocInput[1]))
-        println(board)
         round++
+        println(board)
 
         if(board.isWin(p0.token)){
             println("p0 is the winner")
@@ -27,8 +27,6 @@ fun main() {
             break
         }
 
-
-
         MiniMax.miniMax(board, true, 1, p0, p1)
         ++round
 
@@ -37,7 +35,6 @@ fun main() {
             board.deepCopy(it)
 
         }
-
 
         if(board.isWin(p1.token)){
             println("p1 is the winner")
@@ -49,11 +46,6 @@ fun main() {
         }
 
     }
-
-
-}
-
-fun testRun() {
 
 
 }
