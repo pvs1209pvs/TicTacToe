@@ -1,3 +1,5 @@
+import java.lang.IllegalArgumentException
+
 object MiniMax {
 
     private const val difficulty = 3
@@ -57,10 +59,8 @@ object MiniMax {
 
         for (i in 0 until 3) {
             for (j in 0 until 3) {
-                if (board.isBlank(Pair(i, j))) {
-                    val newBoard = board.make().apply { mark(token, Pair(i, j)) }
-                    moves.add(newBoard)
-                }
+                val newBoard = board.make().apply { mark(token, Pair(i, j)) }
+                moves.add(newBoard)
             }
         }
 

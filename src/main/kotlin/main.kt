@@ -1,3 +1,4 @@
+import java.lang.IllegalArgumentException
 
 fun main() {
 
@@ -13,16 +14,21 @@ fun main() {
     while (true) {
 
         println("Take your turn")
-        val humanLocInput = readln().map { it.digitToInt() }
-        board.mark(p0.token, Pair(humanLocInput[0], humanLocInput[1]))
+        var humanLocInput = readln().map { it.digitToInt() }
+
+        while (board.mark(p0.token, Pair(humanLocInput[0], humanLocInput[1])) == -1) {
+            println("You can't mark here")
+            humanLocInput = readln().map { it.digitToInt() }
+        }
+
         round++
         println(board)
 
-        if(board.isWin(p0.token)){
+        if (board.isWin(p0.token)) {
             println("p0 is the winner")
             break
         }
-        if(round==9){
+        if (round == 9) {
             println("It's a draw")
             break
         }
@@ -36,11 +42,11 @@ fun main() {
 
         }
 
-        if(board.isWin(p1.token)){
+        if (board.isWin(p1.token)) {
             println("p1 is the winner")
             break
         }
-        if(round==9){
+        if (round == 9) {
             println("It's a draw")
             break
         }

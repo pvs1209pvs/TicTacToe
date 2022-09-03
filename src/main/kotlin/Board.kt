@@ -1,3 +1,4 @@
+import java.lang.IllegalArgumentException
 import java.lang.StringBuilder
 import java.util.*
 
@@ -33,22 +34,25 @@ class Board {
 
     }
 
-    fun mark(token: Token, loc: Pair<Int, Int>) {
-        if (withinBound(loc) && isBlank(loc)) {
+    fun mark(token: Token, loc: Pair<Int, Int>): Int {
+        return if (withinBound(loc) && isBlank(loc)) {
             board[loc.first][loc.second] = token
+            0
+        } else {
+            -1
         }
     }
 
     fun isWin(token: Token) = isWinRowCheck(token) || isWinColCheck(token) || isWinDiagCheck(token)
 
-    fun isWinRowCheck(token: Token): Boolean {
-        for (b in board){
-           if(b.count { it == token }==3) return true
+    private fun isWinRowCheck(token: Token): Boolean {
+        for (b in board) {
+            if (b.count { it == token } == 3) return true
         }
         return false
     }
 
-    fun isWinColCheck(token:Token): Boolean {
+    private fun isWinColCheck(token: Token): Boolean {
 
         for (row in 0 until 3) {
 
@@ -60,7 +64,7 @@ class Board {
                 }
             }
 
-            if(tokenCount==3) return true
+            if (tokenCount == 3) return true
 
         }
 
@@ -84,7 +88,7 @@ class Board {
             }
         }
 
-        if(diagCount == 3 || antiDiagCount==3){
+        if (diagCount == 3 || antiDiagCount == 3) {
             return true
         }
 
