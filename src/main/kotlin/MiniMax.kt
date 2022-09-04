@@ -1,50 +1,38 @@
-import java.lang.IllegalArgumentException
-
 object MiniMax {
-
-    private const val difficulty = 3
 
     var globalBest = Board()
 
     // human max x
     // computer min o
-    fun miniMax(board: Board, isMaximizer: Boolean, level: Int, p0: Player, p1: Player) {
+    fun miniMax(board: Board, token: Char, level: Int): Int { // x
 
-        if (level == difficulty) {
-            board.score = heuristic(board, p0, p1)
-            return
+        if (nextMoves(board,token).isEmpty()) {
+            return heuristic(board)
         }
 
-        if (isMaximizer) {
+        return if (token == 'x') {
 
-            val nextMoves = nextMoves(board, p1.token)
+            var localMax = Int.MIN_VALUE
+
+            val nextMoves = nextMoves(board, 'o')
 
             nextMoves.forEach {
-                miniMax(it, false, level + 1, p0, p1)
-                if (it.score > board.score) {
-                    board.score = it.score
-
-                }
+                localMax = maxOf(localMax, miniMax(it, 'o', level + 1))
             }
 
-            if (level == 1) {
-                globalBest.deepCopy(nextMoves.maxBy { it.score })
-            }
+            localMax
 
         } else {
 
-            val nextMoves = nextMoves(board, p0.token)
+            var localMin = Int.MAX_VALUE
+
+            val nextMoves = nextMoves(board, 'x')
 
             nextMoves.forEach {
-                miniMax(it, false, level + 1, p0, p1)
-                if (it.score < board.score) {
-                    board.score = it.score
-                }
+                localMin = minOf(localMin, miniMax(it, 'x', level + 1))
             }
 
-            if (level == 1) {
-                globalBest.deepCopy(nextMoves.minBy { it.score })
-            }
+            localMin
 
         }
 
@@ -53,14 +41,16 @@ object MiniMax {
     /**
      * @param token Char to mark.
      */
-    private fun nextMoves(board: Board, token: Token): List<Board> {
+    fun nextMoves(board: Board, token: Char): List<Board> {
 
         val moves = mutableListOf<Board>()
 
         for (i in 0 until 3) {
             for (j in 0 until 3) {
-                val newBoard = board.make().apply { mark(token, Pair(i, j)) }
-                moves.add(newBoard)
+                if (board.isBlank(Pair(i, j))) {
+                    val newBoard = board.make().apply { mark(token, Pair(i, j)) }
+                    moves.add(newBoard)
+                }
             }
         }
 
@@ -68,7 +58,8 @@ object MiniMax {
 
     }
 
-    private fun hRow(board: Board, token: Token): Int {
+
+    fun hRow(board: Board, token: Char): Int {
 
         var score = 0
 
@@ -84,14 +75,36 @@ object MiniMax {
         return score
     }
 
-    private fun hCol(board: Board, token: Token): Int {
+    fun hCol(board: Board, token: Char): Int {
 
         var score = 0
 
+        // xxo
+//        if(board.board[0][0] =='x' && board.board[1][0] == 'x' && board.board[2][0]=='o'){
+//            score += 1
+//        }
+//        if(board.board[0][1] =='x' && board.board[1][1] == 'x' && board.board[2][1]=='o'){
+//            score += 1
+//        }
+//        if(board.board[0][2] =='x' && board.board[1][2] == 'x' && board.board[2][2]=='o'){
+//            score += 1
+//        }
+//
+//        if(board.board[0][0] =='o' && board.board[1][0] == 'x' && board.board[2][0]=='o'){
+//            score += 1
+//        }
+//        if(board.board[0][1] =='x' && board.board[1][1] == 'x' && board.board[2][1]=='o'){
+//            score += 1
+//        }
+//        if(board.board[0][2] =='x' && board.board[1][2] == 'x' && board.board[2][2]=='o'){
+//            score += 1
+//        }
+//
 
         for (row in 0 until 3) {
 
             var xCount = 0
+            var oCount = 0
 
             for (col in 0 until 3) {
                 if (board.board[col][row] == token) {
@@ -112,7 +125,7 @@ object MiniMax {
 
     }
 
-    private fun hDiag(board: Board, token: Token): Int {
+    fun hDiag(board: Board, token: Char): Int {
 
         var score = 0
 
@@ -145,10 +158,13 @@ object MiniMax {
         return score
     }
 
-    private fun heuristic(board: Board, p0: Player, p1: Player): Int {
-        val p0Score = hRow(board, p0.token) + hCol(board, p0.token) + hDiag(board, p0.token)
-        val p1Score = hRow(board, p1.token) + hCol(board, p1.token) + hDiag(board, p1.token)
-        return p1Score - p0Score
+    fun heuristic(board: Board): Int {
+
+        var xScore = hRow(board, 'x') + hCol(board, 'x') + hDiag(board, 'x')
+        var oScore = hRow(board, 'o') + hCol(board, 'o') + hDiag(board, 'o')
+
+        return oScore - xScore
+
     }
 
 }

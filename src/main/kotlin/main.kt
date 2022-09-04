@@ -1,57 +1,50 @@
-import java.lang.IllegalArgumentException
+import java.util.*
+
+const val difficulty = 3
 
 fun main() {
 
-    var round = 0
+
+
     val board = Board()
 
-    println("Choose your token:\n1. X\n2. O")
-    val userInput = readLine()!!.toInt()
-
-    val p0 = Player(if (userInput == 1) Token.X else Token.O)
-    val p1 = Player(if (p0.token == Token.X) Token.O else Token.X)
+    println("Choose your token: X or O")
+//    val humanToken = readln()[0]
+    val humanToken = 'x'
 
     while (true) {
 
-        println("Take your turn (2 digit number)")
-        var humanLocInput = readln().map { it.digitToInt() }
+        println("Take your turn")
+        val humanLocInput = readln().map { it.digitToInt() }
+        board.mark(humanToken, Pair(humanLocInput[0], humanLocInput[1]))
 
-        while (board.mark(p0.token, Pair(humanLocInput[0], humanLocInput[1])) == -1) {
-            println("You can't mark here")
-            humanLocInput = readln().map { it.digitToInt() }
-        }
-
-        round++
         println(board)
 
-        if (board.isWin(p0.token)) {
-            println("p0 is the winner")
-            break
-        }
-        if (round == 9) {
-            println("It's a draw")
-            break
+        val moves = MiniMax.nextMoves(board,'0')
+        moves.forEach{
+            it.score = MiniMax.miniMax(it, humanToken, 1)
+            println(it.score)
         }
 
-        MiniMax.miniMax(board, true, 1, p0, p1)
-        ++round
 
-        MiniMax.globalBest.also {
-            println(it)
-            board.deepCopy(it)
+        val ans = moves.minBy { it.score }
 
-        }
 
-        if (board.isWin(p1.token)) {
-            println("p1 is the winner")
-            break
-        }
-        if (round == 9) {
-            println("It's a draw")
-            break
-        }
+        println("cool")
+        println(ans)
 
+        board.deepCopy(ans)
+
+//        println("Result")
+//        println(MiniMax.globalBest)
+//        board.deepCopy(MiniMax.globalBest)
     }
+//    testRun()
+
+
+}
+
+fun testRun() {
 
 
 }
