@@ -1,10 +1,6 @@
 object MiniMax {
 
-    var globalBest = Board()
-
-    // human max x
-    // computer min o
-    fun miniMax(board: Board, token: Char, level: Int): Int { // x
+    fun miniMax(board: Board, token: Char): Int {
 
         if (board.isWin(if (token == 'x') 'o' else 'x') || board.countBlank() == 0) {
             return heuristic(board)
@@ -17,7 +13,7 @@ object MiniMax {
             val nextMoves = nextMoves(board, 'o')
 
             nextMoves.forEach {
-                localMax = maxOf(localMax, miniMax(it, 'o', level + 1))
+                localMax = maxOf(localMax, miniMax(it, 'o'))
             }
 
             localMax
@@ -29,7 +25,7 @@ object MiniMax {
             val nextMoves = nextMoves(board, 'x')
 
             nextMoves.forEach {
-                localMin = minOf(localMin, miniMax(it, 'x', level + 1))
+                localMin = minOf(localMin, miniMax(it, 'x'))
             }
 
             localMin
@@ -58,26 +54,10 @@ object MiniMax {
 
     }
 
-
-    fun heuristic(board: Board): Int {
-
-        var x = 0
-
-        if (board.isWin('x')) {
-            x = 1 + board.countBlank()
-//            println("x $x")
-        }
-
-        var o = 0
-
-        if (board.isWin('o')) {
-            o = board.countBlank() + 1
-//            println("o $o")
-        }
-
+    private fun heuristic(board: Board): Int {
+        val x = if (board.isWin('x')) board.countBlank() + 1 else 0
+        val o = if (board.isWin('o')) board.countBlank() + 1 else 0
         return x - o
-
     }
-
 
 }

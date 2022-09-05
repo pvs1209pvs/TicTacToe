@@ -1,14 +1,10 @@
 import java.lang.StringBuilder
 import java.util.*
 
-class Board() {
+class Board {
 
     val board = Array(3) { Array(3) { ' ' } }
     var score = 0
-
-    init {
-//        b = Board()
-    }
 
     fun make(): Board {
         val newBoard = Board()
@@ -20,7 +16,6 @@ class Board() {
         newBoard.score = score
 
         return newBoard
-
 
     }
 
@@ -58,7 +53,7 @@ class Board() {
 
     }
 
-    private fun isDiagWin(token: Char): Boolean {
+    private fun isDiagonalWin(token: Char): Boolean {
 
         var diagCount = 0
         var antiDiagCount = 0
@@ -86,20 +81,8 @@ class Board() {
 
     }
 
-    fun isWin(token: Char) = isRowWin(token) || isColWin(token) || isDiagWin(token)
+    fun isWin(token: Char) = isRowWin(token) || isColWin(token) || isDiagonalWin(token)
 
-
-    fun deepCopy(other: Board) {
-
-        for (i in 0 until 3) {
-            for (j in 0 until 3) {
-                board[i][j] = other.board[i][j]
-            }
-        }
-
-        score = other.score
-
-    }
 
     fun mark(token: Char, loc: Pair<Int, Int>) {
         if (withinBound(loc) && isBlank(loc)) {
@@ -149,8 +132,6 @@ class Board() {
     override fun toString(): String {
 
         val result = StringBuilder()
-
-        result.append(score).append("\n")
 
         for (i in 0 until 3) {
             result.append(board[i].contentToString()).append("\n")

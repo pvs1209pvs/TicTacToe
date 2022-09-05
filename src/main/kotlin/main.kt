@@ -1,27 +1,19 @@
 import java.util.*
 
-const val difficulty = 5
 var round = 0
 
 fun main() {
 
-
-//    testRun()
-//    return
-
-
     var board = Board()
 
-    println("Choose your token: X or O")
-//    val humanToken = readln()[0]
-
     val humanToken = 'x'
+    val aiToken = 'o'
 
     while (true) {
 
-        val moves = MiniMax.nextMoves(board, 'o')
+        val moves = MiniMax.nextMoves(board, aiToken)
         moves.forEach {
-            it.score = MiniMax.miniMax(it, humanToken, 1)
+            it.score = MiniMax.miniMax(it, humanToken)
         }
 
         val ans = moves.minBy { it.score }
@@ -30,7 +22,7 @@ fun main() {
         board = ans
         ++round
 
-        if (board.isWin('o')) {
+        if (board.isWin(aiToken)) {
             println("AI WON")
             break
         }
@@ -51,7 +43,7 @@ fun main() {
 
         println(board)
         ++round
-        if (board.isWin('x')) {
+        if (board.isWin(humanToken)) {
             println("Human WON")
             return
         }
@@ -62,15 +54,5 @@ fun main() {
 
     }
 
-
-}
-
-fun testRun() {
-
-    val board = Board()
-    board.board[0] = arrayOf('x', 'o', 'x')
-    board.board[1] = arrayOf('x', 'o', ' ')
-    board.board[2] = arrayOf('x', ' ', 'o')
-    println(MiniMax.heuristic(board))
 
 }
