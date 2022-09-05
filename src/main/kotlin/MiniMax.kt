@@ -6,21 +6,9 @@ object MiniMax {
     // computer min o
     fun miniMax(board: Board, token: Char, level: Int): Int { // x
 
-//        if (nextMoves(board, if (token == 'x') 'o' else 'x').isEmpty()) {
-//            return heuristic(board)
-//        }
-
-//        if (nextMoves(board, token).isEmpty()) {
-//            return heuristic(board)
-//        }
-
         if (board.isWin(if (token == 'x') 'o' else 'x') || board.countBlank() == 0) {
             return heuristic(board)
         }
-
-//        if (level==difficulty) {
-//            return heuristic(board)
-//        }
 
         return if (token == 'x') {
 
