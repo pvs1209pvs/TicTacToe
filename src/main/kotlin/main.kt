@@ -1,9 +1,12 @@
 import java.util.*
 
-const val difficulty = 3
+const val difficulty = 5
 
 fun main() {
 
+
+//    testRun()
+//    return
 
 
     val board = Board()
@@ -14,30 +17,27 @@ fun main() {
 
     while (true) {
 
-        println("Take your turn")
-        val humanLocInput = readln().map { it.digitToInt() }
-        board.mark(humanToken, Pair(humanLocInput[0], humanLocInput[1]))
 
-        println(board)
 
         val moves = MiniMax.nextMoves(board,'0')
         moves.forEach{
             it.score = MiniMax.miniMax(it, humanToken, 1)
-            println(it.score)
         }
 
 
         val ans = moves.minBy { it.score }
 
 
-        println("cool")
         println(ans)
 
         board.deepCopy(ans)
 
-//        println("Result")
-//        println(MiniMax.globalBest)
-//        board.deepCopy(MiniMax.globalBest)
+        println("Take your turn")
+        val humanLocInput = readln().map { it.digitToInt() }
+        board.mark(humanToken, Pair(humanLocInput[0], humanLocInput[1]))
+
+        println(board)
+
     }
 //    testRun()
 
@@ -46,5 +46,10 @@ fun main() {
 
 fun testRun() {
 
+    val board = Board()
+    board.board[0] = arrayOf('x','o','x')
+    board.board[1] = arrayOf('x','o',' ')
+    board.board[2] = arrayOf('x',' ','o')
+    println(MiniMax.heuristic(board))
 
 }
