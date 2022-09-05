@@ -1,13 +1,16 @@
 object MiniMax {
 
     fun bestMove(board: Board): Board {
+
         val moves = nextMoves(board, aiToken)
 
         moves.forEach {
             it.score = miniMax(it, humanToken)
         }
 
+
         return moves.minBy { it.score }
+
     }
 
     private fun miniMax(board: Board, token: Char): Int {

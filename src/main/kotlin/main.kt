@@ -1,14 +1,17 @@
-var round = 0
-var board = Board()
+import java.io.InputStream
+import java.util.Scanner
+
 const val humanToken = 'x'
 const val aiToken = 'o'
 
+fun startGame(scanner: Scanner): Result {
 
-fun startGame(): Result {
+    var board = Board()
+    var round = 0
 
     while (true) {
 
-        val aiBestMove  = MiniMax.bestMove(board)
+        val aiBestMove = MiniMax.bestMove(board)
         println(aiBestMove)
         board = aiBestMove
         ++round
@@ -22,20 +25,21 @@ fun startGame(): Result {
 
         println("Take your turn")
 
-        var humanLocInput = readln().trim()
+        var humanLocInput = scanner.next().trim()
+        println("test $humanLocInput")
 
         while (humanLocInput.length != 2 || humanLocInput.toIntOrNull() == null) {
             println("Enter 2 digits with 0 and 2")
-            humanLocInput = readln().trim()
+            humanLocInput = scanner.next().trim()
         }
         var humanMove = humanLocInput.map { it.digitToInt() }
 
         while (!board.isBlank(Pair(humanMove[0], humanMove[1]))) {
             println("Enter a valid cell")
-            humanLocInput = readln().trim()
+            humanLocInput = scanner.next().trim()
             while (humanLocInput.length != 2) {
                 println("Enter 2 digits with 0 and 2")
-                humanLocInput = readln().trim()
+                humanLocInput = scanner.next().trim()
             }
             humanMove = humanLocInput.map { it.digitToInt() }
         }
@@ -57,9 +61,7 @@ fun startGame(): Result {
 
 fun main() {
 
-
-
-    when (startGame()) {
+    when (startGame(Scanner(System.`in`))) {
         Result.AI -> println("AI WON")
         Result.HUMAN -> println("Human WON")
         Result.DRAW -> println("It's a DRAW")
