@@ -1,9 +1,6 @@
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.util.Scanner
 
 class Test {
 
@@ -12,29 +9,34 @@ class Test {
     private var round = 0
     private var board = Board()
 
-    lateinit var sysInBackup: InputStream
+    private fun resetGame() {
+        round = 0
+        board = Board()
+    }
 
     @BeforeEach
     fun boardSet() {
-        sysInBackup = System.`in` // backup System.in to restore it later
-        round = 0
-        board = Board()
-
+        resetGame()
     }
 
     @AfterEach
     fun cleanup() {
-        System.setIn(sysInBackup)
-
+        resetGame()
     }
 
-    @Test
-    fun drawWhenHumanPlaysCenter() {
 
-        System.setIn(ByteArrayInputStream("11 02 11 22".toByteArray()))
-        val humanInput = Scanner(System.`in`)
+    private fun aiMove(): Board {
 
-        val result: Result
+        val moves = MiniMax.nextMoves(board, aiToken)
+
+        moves.forEach {
+            it.score = MiniMax.miniMax(it, humanToken)
+        }
+
+        return moves.minBy { it.score }
+    }
+
+    fun startGame(moves: Iterator<Pair<Int, Int>>): Result {
 
         while (true) {
 
@@ -42,35 +44,56 @@ class Test {
             ++round
 
             if (board.isWin(aiToken)) {
-                result = Result.AI
-                break
+                return Result.AI
             }
             if (round == 9) {
-                result = Result.DRAW
-                break
+                return Result.DRAW
             }
 
-            while (humanInput.hasNext()) {
-                val humanMove = humanInput.next()
-                board.mark(humanToken, Pair(humanMove[0].digitToInt(), humanMove[1].digitToInt()))
-                ++round
-            }
-
-
+            board.mark(humanToken, moves.next())
+            ++round
             if (board.isWin(humanToken)) {
-                result = Result.HUMAN
-                break
+                return Result.HUMAN
             }
             if (round == 9) {
-                result = Result.DRAW
-                break
+                return Result.DRAW
             }
-
 
         }
 
-        assert(result == Result.DRAW)
+    }
 
+
+    @Test
+    fun `draw when human plays center`() {
+        val moves = listOf(
+            Pair(1, 1),
+            Pair(0, 2),
+            Pair(1, 0),
+            Pair(2, 2),
+        ).iterator()
+        assert(startGame(moves) == Result.DRAW)
+
+    }
+
+    @Test
+    fun `ai wins when human plays side 1`() {
+        val moves = listOf(
+            Pair(1, 0),
+            Pair(0, 2),
+            Pair(2, 1)
+        ).iterator()
+        assert(startGame(moves) == Result.AI)
+    }
+
+    @Test
+    fun `ai wins when human plays side 2`() {
+        val moves = listOf(
+            Pair(1, 0),
+            Pair(0, 2),
+            Pair(2, 2)
+        ).iterator()
+        assert(startGame(moves) == Result.AI)
     }
 
 }

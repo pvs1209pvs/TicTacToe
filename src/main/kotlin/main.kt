@@ -1,11 +1,10 @@
-import java.io.ByteArrayInputStream
-import java.util.Scanner
-
+import java.util.logging.Logger
 
 var round = 0
 var board = Board()
 const val humanToken = 'x'
 const val aiToken = 'o'
+
 
 fun aiMove(): Board {
 
