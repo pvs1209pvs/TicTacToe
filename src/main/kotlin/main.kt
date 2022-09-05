@@ -32,14 +32,26 @@ fun main() {
         }
 
         println("Take your turn")
-        var humanLocInput = readln().map { it.digitToInt() }
 
-        while (!board.isBlank(Pair(humanLocInput[0], humanLocInput[1]))){
+        var humanLocInput = readln().trim()
+
+        while (humanLocInput.length != 2 || humanLocInput.toIntOrNull()==null) {
+            println("Enter 2 digits with 0 and 2")
+            humanLocInput = readln().trim()
+        }
+        var humanMove = humanLocInput.map { it.digitToInt() }
+
+        while (!board.isBlank(Pair(humanMove[0], humanMove[1]))) {
             println("Enter a valid cell")
-            humanLocInput = readln().map { it.digitToInt() }
+            humanLocInput = readln().trim()
+            while (humanLocInput.length != 2) {
+                println("Enter 2 digits with 0 and 2")
+                humanLocInput = readln().trim()
+            }
+            humanMove = humanLocInput.map { it.digitToInt() }
         }
 
-        board.mark(humanToken, Pair(humanLocInput[0], humanLocInput[1]))
+        board.mark(humanToken, Pair(humanMove[0], humanMove[1]))
 
         println(board)
         ++round
