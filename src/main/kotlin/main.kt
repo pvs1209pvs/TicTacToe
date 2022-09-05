@@ -1,41 +1,44 @@
-import java.util.*
+import java.io.ByteArrayInputStream
+import java.util.Scanner
+
 
 var round = 0
+var board = Board()
+const val humanToken = 'x'
+const val aiToken = 'o'
 
-fun main() {
+fun aiMove(): Board {
 
-    var board = Board()
+    val moves = MiniMax.nextMoves(board, aiToken)
 
-    val humanToken = 'x'
-    val aiToken = 'o'
+    moves.forEach {
+        it.score = MiniMax.miniMax(it, humanToken)
+    }
+
+    return moves.minBy { it.score }
+}
+
+fun startGame(): Result {
 
     while (true) {
 
-        val moves = MiniMax.nextMoves(board, aiToken)
-        moves.forEach {
-            it.score = MiniMax.miniMax(it, humanToken)
-        }
-
-        val ans = moves.minBy { it.score }
-
-        println(ans)
-        board = ans
+        val aiBestMove = aiMove()
+        println(aiBestMove)
+        board = aiBestMove
         ++round
 
         if (board.isWin(aiToken)) {
-            println("AI WON")
-            break
+            return Result.AI
         }
         if (round == 9) {
-            println("It's a DRAW")
-            break
+            return Result.DRAW
         }
 
         println("Take your turn")
 
         var humanLocInput = readln().trim()
 
-        while (humanLocInput.length != 2 || humanLocInput.toIntOrNull()==null) {
+        while (humanLocInput.length != 2 || humanLocInput.toIntOrNull() == null) {
             println("Enter 2 digits with 0 and 2")
             humanLocInput = readln().trim()
         }
@@ -56,15 +59,24 @@ fun main() {
         println(board)
         ++round
         if (board.isWin(humanToken)) {
-            println("Human WON")
-            return
+            return Result.HUMAN
         }
         if (round == 9) {
-            println("It's a DRAW")
-            return
+            return Result.DRAW
         }
 
     }
 
+}
+
+fun main() {
+
+
+
+    when (startGame()) {
+        Result.AI -> println("AI WON")
+        Result.HUMAN -> println("Human WON")
+        Result.DRAW -> println("It's a DRAW")
+    }
 
 }
