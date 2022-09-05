@@ -26,15 +26,16 @@ class Test {
     }
 
     @Test
-    fun `ai wins when human plays side 1`() {
+    fun `draw when human plays corner`() {
+        System.setIn(ByteArrayInputStream("02 11 10 22".toByteArray()))
+        assert(startGame(Scanner(System.`in`))== Result.DRAW)
+    }
+
+    @Test
+    fun `ai wins when human plays side`() {
         System.setIn(ByteArrayInputStream("10 02 21".toByteArray()))
         assert(startGame(Scanner(System.`in`))== Result.AI)
     }
 
-    @Test
-    fun `ai wins when human plays side 2`() {
-        System.setIn(ByteArrayInputStream("10 02 22".toByteArray()))
-        assert(startGame(Scanner(System.`in`))== Result.AI)
-    }
 
 }
