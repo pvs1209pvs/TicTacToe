@@ -24,23 +24,11 @@ class Test {
         resetGame()
     }
 
-
-    private fun aiMove(): Board {
-
-        val moves = MiniMax.nextMoves(board, aiToken)
-
-        moves.forEach {
-            it.score = MiniMax.miniMax(it, humanToken)
-        }
-
-        return moves.minBy { it.score }
-    }
-
-    fun startGame(moves: Iterator<Pair<Int, Int>>): Result {
+    private fun startGame(moves: Iterator<Pair<Int, Int>>): Result {
 
         while (true) {
 
-            board = aiMove()
+            board = MiniMax.bestMove(board)
             ++round
 
             if (board.isWin(aiToken)) {

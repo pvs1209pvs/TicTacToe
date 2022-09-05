@@ -3,22 +3,12 @@ var board = Board()
 const val humanToken = 'x'
 const val aiToken = 'o'
 
-fun aiMove(): Board {
-
-    val moves = MiniMax.nextMoves(board, aiToken)
-
-    moves.forEach {
-        it.score = MiniMax.miniMax(it, humanToken)
-    }
-
-    return moves.minBy { it.score }
-}
 
 fun startGame(): Result {
 
     while (true) {
 
-        val aiBestMove = aiMove()
+        val aiBestMove  = MiniMax.bestMove(board)
         println(aiBestMove)
         board = aiBestMove
         ++round

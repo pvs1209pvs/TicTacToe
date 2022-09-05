@@ -1,6 +1,16 @@
 object MiniMax {
 
-    fun miniMax(board: Board, token: Char): Int {
+    fun bestMove(board: Board): Board {
+        val moves = nextMoves(board, aiToken)
+
+        moves.forEach {
+            it.score = miniMax(it, humanToken)
+        }
+
+        return moves.minBy { it.score }
+    }
+
+    private fun miniMax(board: Board, token: Char): Int {
 
         if (board.isWin(if (token == 'x') 'o' else 'x') || board.countBlank() == 0) {
             return heuristic(board)
@@ -34,10 +44,16 @@ object MiniMax {
 
     }
 
+    private fun heuristic(board: Board): Int {
+        val x = if (board.isWin('x')) board.countBlank() + 1 else 0
+        val o = if (board.isWin('o')) board.countBlank() + 1 else 0
+        return x - o
+    }
+
     /**
      * @param token Char to mark.
      */
-    fun nextMoves(board: Board, token: Char): List<Board> {
+    private fun nextMoves(board: Board, token: Char): List<Board> {
 
         val moves = mutableListOf<Board>()
 
@@ -52,12 +68,6 @@ object MiniMax {
 
         return moves.distinct()
 
-    }
-
-    private fun heuristic(board: Board): Int {
-        val x = if (board.isWin('x')) board.countBlank() + 1 else 0
-        val o = if (board.isWin('o')) board.countBlank() + 1 else 0
-        return x - o
     }
 
 }
